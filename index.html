@@ -21,8 +21,8 @@ body{background:radial-gradient(ellipse at 50% 35%,var(--navy1),var(--navy2) 75%
 canvas{position:fixed;inset:0;width:100%;height:100%;z-index:1;display:block}
 .card{position:fixed;inset:0;z-index:2;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;text-align:center;
  padding:calc(env(safe-area-inset-top,0px) + 2vh) 22px calc(120px + env(safe-area-inset-bottom,0px))}
-.pre{font-size:clamp(14px,min(4.4vw,2.6vh),26px);letter-spacing:.32em;text-transform:uppercase;opacity:.85;margin-bottom:.5em}
-.big{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:clamp(80px,min(30vw,19vh),240px);line-height:1;margin:0;
+.pre{position:relative;top:2.5vh;font-size:clamp(8px,2.1vw,13px);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;line-height:1.95;width:calc(100vw - 16px);max-width:820px;opacity:.95;margin-bottom:.5em}
+.big{position:relative;top:-2vh;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:clamp(100px,min(37vw,23.5vh),300px);line-height:1;margin:0;
  background:linear-gradient(180deg,var(--gold2),var(--gold) 55%,#b8913a);-webkit-background-clip:text;background-clip:text;color:transparent;
  filter:drop-shadow(0 4px 22px rgba(232,200,114,.35))}
 .sub{font-size:clamp(15px,min(4.6vw,2.8vh),28px);letter-spacing:.38em;text-transform:uppercase;margin-top:0}
@@ -32,6 +32,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;z-index:1;display:block}
 .info small{display:block;font-size:.78em;font-weight:400;opacity:.9;letter-spacing:.08em;margin-top:.5em}
 .hud{position:fixed;left:0;right:0;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;font-size:clamp(15px,4vw,19px)}
 .hud button{pointer-events:auto;background:rgba(10,22,51,.6);color:var(--gold);border:1px solid var(--gold);border-radius:26px;padding:8px 20px;font:inherit;cursor:pointer}
+.addr{font-size:.82em;font-weight:400}
 .thanks{font-family:'Playfair Display',Georgia,serif;font-weight:500;font-size:clamp(22px,min(6.4vw,3.6vh),42px);color:var(--gold2);text-shadow:0 2px 18px rgba(232,200,114,.4)}
 #msg{opacity:.9;min-height:1.4em;text-align:center;padding:0 16px}
 .card .pre,.card .big,.card .sub,.card .name,.card .info,.card .info small,.card .thanks{font-weight:700}
@@ -52,12 +53,12 @@ canvas{position:fixed;inset:0;width:100%;height:100%;z-index:1;display:block}
 <canvas id="c"></canvas>
 <div id="open"><div class="t">Janko 70</div><div class="b">♪ Otvoriť pozvánku</div></div>
 <div class="card">
- <div class="pre">Pozývam Vás na oslavu</div>
+ <div class="pre">Pri príležitosti môjho životného jubilea<br>Vás srdečne pozývam na oslavu</div>
  <div class="big">70</div>
  <div class="sub">narodenín</div>
  <div class="name">Janko</div>
  <div class="line"></div>
- <div class="info">2. januára 2027<br>14:00 hod.<small>Kaštieľ Agátka, Čierna Voda</small></div>
+ <div class="info">2. januára 2027<br>14:00 hod.<small>V Kaštieli Agátka, Čierna Voda<br><span class="addr">Pezinská 901/5, Chorvátsky Grob</span></small></div>
  <div class="line"></div>
  <div class="thanks">Teším sa na Vás</div>
 </div>
@@ -145,6 +146,23 @@ var ov=document.getElementById('open');
 function openInvite(){tryStart();ov.classList.add('gone');setTimeout(function(){ov.style.display='none'},800)}
 ov.addEventListener('click',openInvite);
 ov.addEventListener('touchend',function(e){e.preventDefault();openInvite()});
+})();
+</script>
+<script>
+/* horný text: najväčšia veľkosť, pri ktorej sa riadok zmestí, potom zmenšená koeficientom SCALE */
+(function(){
+ var e=document.querySelector('.pre');if(!e)return;
+ var SCALE=0.88; /* 1 = najväčšie, ktoré sa zmestí; menej = menšie písmo */
+ function fit(){
+  var max=Math.min(34,window.innerHeight*0.036),fs=max;
+  e.style.fontSize=fs+'px';
+  while(fs>10&&e.scrollWidth>e.clientWidth+0.5){fs-=0.5;e.style.fontSize=fs+'px'}
+ e.style.fontSize=(fs*SCALE)+'px';
+ }
+ fit();
+ window.addEventListener('resize',fit);
+ if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
+ setTimeout(fit,400);
 })();
 </script>
 </body>
